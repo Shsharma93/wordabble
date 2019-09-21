@@ -2,6 +2,7 @@
   width: 100vw;
   height: 100vh;
   background: #1f2041;
+  position: relative;
 }
 
 .container {
@@ -13,8 +14,22 @@
   background: #ffd166;
 }
 
-.icon {
+%icon {
   margin: 0.75rem;
   color: #eacdc2;
   font-size: 1.5rem;
+}
+
+.icon {
+  @extend %icon;
+}
+
+.success {
+  @extend %icon;
+  color: #36b37e;
+}
+
+.error {
+  @extend %icon;
+  color: #ff5630;
 }

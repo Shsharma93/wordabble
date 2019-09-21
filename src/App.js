@@ -6,12 +6,15 @@ import classes from './app.module.scss';
 import { DragDropContext } from 'react-beautiful-dnd';
 import letterValues from './utils/letter-values.json';
 import wordLists from './utils/words.json';
+import Toast from './components/Toast/Toast';
 import {
   FaHistory,
   FaPlayCircle,
   FaStopCircle,
   FaPaperPlane,
-  FaTrashAlt
+  FaTrashAlt,
+  FaTimes,
+  FaCheckCircle
 } from 'react-icons/fa';
 
 class App extends Component {
@@ -25,7 +28,8 @@ class App extends Component {
     wordLists: wordLists.words,
     isStart: false,
     duplicateHand: [],
-    prevHand: []
+    prevHand: [],
+    isMatch: null
   };
 
   handleEndGame = () => {
@@ -100,12 +104,24 @@ class App extends Component {
     });
   };
 
+  dismissToast = time => {
+    setTimeout(() => {
+      this.setState({
+        isMatch: null
+      });
+    }, time);
+  };
+
   onSubmit = () => {
     const { word, wordLists } = this.state;
     const submittedWord = word.map(letter => letter.letter);
     if (wordLists.includes(submittedWord.join('').toUpperCase())) {
       this.calculateScore();
+      this.setState({ isMatch: true });
+      this.dismissToast(5000);
     } else {
+      this.setState({ isMatch: false });
+      this.dismissToast(5000);
     }
   };
 
@@ -150,7 +166,37 @@ class App extends Component {
   };
 
   render() {
-    const { hand, totalScore, word, currentScore, isStart } = this.state;
+    const {
+      hand,
+      totalScore,
+      word,
+      currentScore,
+      isStart,
+      isMatch
+    } = this.state;
+
+    let toast;
+
+    if (isMatch === true) {
+      toast = (
+        <Toast
+          type='success'
+          icon={<FaCheckCircle className={classes.success} />}
+          text='Awesome! Correct Guess'
+          onClick={() => this.dismissToast(100)}
+        />
+      );
+    } else if (isMatch === false) {
+      toast = (
+        <Toast
+          type='error'
+          icon={<FaTimes className={classes.error} />}
+          text='Wrong Guess, Try Again!'
+          onClick={() => this.dismissToast(100)}
+        />
+      );
+    }
+
     return (
       <div className={classes.app}>
         <div className={classes.container}>
@@ -193,6 +239,7 @@ class App extends Component {
           active={word.length > 0 ? false : true}
           icon={<FaPaperPlane className={classes.icon} />}
         />
+        {toast}
       </div>
     );
   }
