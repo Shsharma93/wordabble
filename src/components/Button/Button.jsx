@@ -1,11 +1,11 @@
 import React from 'react';
 import classes from './button.module.scss';
 
-const Button = ({ text, onClick }) => {
+const Button = ({ text, onClick, active, icon }) => {
   return (
-    <div className={classes.wrapper} onClick={onClick}>
-      {text}
-    </div>
+    <button className={classes.wrapper} onClick={onClick} disabled={active}>
+      {text} {icon}
+    </button>
   );
 };
 
