@@ -15,6 +15,11 @@
   cursor: pointer;
 }
 
+.alert {
+  bottom: 50%;
+  right: 2%;
+}
+
 .success {
   background: #e3fcef;
   color: #237b5b;
@@ -27,7 +32,7 @@
 
 .warning {
   background: #fffae6;
-  color: #ff8b00; //icon color #FFAB00
+  color: #ff8b00;
 }
 
 @keyframes toast-in {
@@ -36,5 +41,23 @@
   }
   to {
     transform: translatex(0);
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .container {
+    height: 2.5rem;
+    width: 14rem;
+    font-size: 0.9rem;
+    bottom: 3%;
+    right: 2%;
+    transition: transform 0.6s ease-in-out;
+    animation: toast-in 0.7s;
+    cursor: pointer;
+  }
+
+  .alert {
+    bottom: 55%;
+    right: 2%;
   }
 }

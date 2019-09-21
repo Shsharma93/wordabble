@@ -6,6 +6,9 @@ const Toast = ({ icon, text, type, onClick }) => {
 
   if (type === 'error') style = [classes.container, classes.error].join(' ');
 
+  if (type === 'warning')
+    style = [classes.container, classes.alert, classes.warning].join(' ');
+
   if (type === 'success')
     style = [classes.container, classes.success].join(' ');
 

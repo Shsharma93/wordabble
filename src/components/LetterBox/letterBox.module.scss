@@ -16,5 +16,23 @@
     display: flex;
     justify-content: center;
     background: #06d6a0;
+    box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .container {
+    height: 10rem;
+    width: 90%;
+    margin: 1rem auto;
+    p {
+      font-size: 1rem;
+    }
+    .wrapper {
+      height: 5rem;
+      width: 100%;
+      margin: 0 auto;
+      padding: auto;
+    }
   }
 }
