@@ -2,6 +2,7 @@
   width: 100vw;
   height: 100vh;
   background: #118ab2;
+  overflow: hidden;
   position: relative;
   .header {
     display: flex;
@@ -94,6 +95,3 @@
     font-size: 1.2rem;
   }
 }
-
-
-

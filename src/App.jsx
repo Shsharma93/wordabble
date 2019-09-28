@@ -22,7 +22,8 @@ class App extends Component {
   state = {
     hand: [],
     word: [],
-    words: [],
+    myWords: [],
+    myGame: [{ hand: '', words: [], score: 0 }],
     letterValues: letterValues,
     totalScore: 0,
     currentScore: 0,
@@ -35,10 +36,17 @@ class App extends Component {
   };
 
   handleEndGame = () => {
-    const { duplicateHand } = this.state;
+    const { duplicateHand, myWords, totalScore } = this.state;
+
+    const letterArray = duplicateHand.map(letter => letter.letter);
+    let handLetter = letterArray.reduce((a, b) => a + b);
+    const myGame = { hand: handLetter, words: myWords, score: totalScore };
+    console.log(myGame);
     this.setState({
       hand: [],
       word: [],
+      myWords: [],
+      myGame,
       isStart: false,
       prevHand: duplicateHand,
       duplicateHand: []
@@ -55,6 +63,7 @@ class App extends Component {
     this.setState({
       hand,
       word: [],
+      myWords: [],
       isStart: true,
       totalScore: 0,
       currentScore: 0,
@@ -63,62 +72,51 @@ class App extends Component {
     });
   };
 
-  continueGame = () => {
-    const { duplicateHand } = this.state;
-    const newHand = this.getHandValue();
-
-    this.setState({
-      hand: newHand,
-      duplicateHand: newHand,
-      prevHand: duplicateHand
-    });
-  };
-
   // getHandValue = () => {
-  //   const random = Math.floor(Math.random() * 3) + 0;
-  //   const handList = [
-  //     [
-  //       { id: 'item-1', letter: 'i', value: 1 },
-  //       { id: 'item-2', letter: 'n', value: 2 },
-  //       { id: 'item-3', letter: 'e', value: 3 },
-  //       { id: 'item-4', letter: 'r', value: 4 },
-  //       { id: 'item-5', letter: 't', value: 5 },
-  //       { id: 'item-6', letter: 'i', value: 6 },
-  //       { id: 'item-7', letter: 'a', value: 7 }
-  //     ],
-  //     [
-  //       { id: 'item-1', letter: 'a', value: 1 },
-  //       { id: 'item-2', letter: 'n', value: 2 },
-  //       { id: 'item-3', letter: 'i', value: 3 },
-  //       { id: 'item-4', letter: 'm', value: 4 },
-  //       { id: 'item-5', letter: 'a', value: 5 },
-  //       { id: 'item-6', letter: 't', value: 6 },
-  //       { id: 'item-7', letter: 'e', value: 7 }
-  //     ],
-  //     [
-  //       { id: 'item-1', letter: 'a', value: 1 },
-  //       { id: 'item-2', letter: 's', value: 2 },
-  //       { id: 'item-3', letter: 'o', value: 3 },
-  //       { id: 'item-4', letter: 'c', value: 4 },
-  //       { id: 'item-5', letter: 'i', value: 5 },
-  //       { id: 'item-6', letter: 'a', value: 6 },
-  //       { id: 'item-7', letter: 'l', value: 7 }
-  //     ]
-  //   ];
-  //   return handList[random];
+  //   return Array.from({ length: 7 }, (v, k) => k).map(k => {
+  //     const random = Math.floor(Math.random() * 26) + 0;
+  //     const letter = Object.keys(letterValues)[random];
+  //     const value = letterValues[letter];
+  //     return {
+  //       id: `letter-${k}`,
+  //       letter,
+  //       value
+  //     };
+  //   });
   // };
 
   getHandValue = () => {
-    return Array.from({ length: 7 }, (v, k) => k).map(k => {
-      const random = Math.floor(Math.random() * 26) + 0;
-      const letter = Object.keys(letterValues)[random];
-      const value = letterValues[letter];
-      return {
-        id: `letter-${k}`,
-        letter,
-        value
-      };
-    });
+    const random = Math.floor(Math.random() * 3) + 0;
+    const handList = [
+      [
+        { id: 'item-1', letter: 'i', value: 1 },
+        { id: 'item-2', letter: 'n', value: 2 },
+        { id: 'item-3', letter: 'e', value: 3 },
+        { id: 'item-4', letter: 'r', value: 4 },
+        { id: 'item-5', letter: 't', value: 5 },
+        { id: 'item-6', letter: 'i', value: 6 },
+        { id: 'item-7', letter: 'a', value: 7 }
+      ],
+      [
+        { id: 'item-1', letter: 'a', value: 1 },
+        { id: 'item-2', letter: 'n', value: 2 },
+        { id: 'item-3', letter: 'i', value: 3 },
+        { id: 'item-4', letter: 'm', value: 4 },
+        { id: 'item-5', letter: 'a', value: 5 },
+        { id: 'item-6', letter: 't', value: 6 },
+        { id: 'item-7', letter: 'e', value: 7 }
+      ],
+      [
+        { id: 'item-1', letter: 'a', value: 1 },
+        { id: 'item-2', letter: 's', value: 2 },
+        { id: 'item-3', letter: 'o', value: 3 },
+        { id: 'item-4', letter: 'c', value: 4 },
+        { id: 'item-5', letter: 'i', value: 5 },
+        { id: 'item-6', letter: 'a', value: 6 },
+        { id: 'item-7', letter: 'l', value: 7 }
+      ]
+    ];
+    return handList[random];
   };
 
   handleReplayGame = () => {
@@ -126,6 +124,7 @@ class App extends Component {
     this.setState({
       hand: prevHand,
       word: [],
+      myWords: [],
       totalScore: 0,
       currentScore: 0,
       isStart: true,
@@ -138,24 +137,27 @@ class App extends Component {
     this.setState({
       hand: duplicateHand,
       word: [],
-      totalScore: 0,
       currentScore: 0
     });
   };
 
   calculateScore = () => {
-    const { word, totalScore, duplicateHand } = this.state;
+    const { word, totalScore, duplicateHand, myWords } = this.state;
     const valueArray = word.map(letter => letter.value);
     let currentScore = valueArray.reduce((a, b) => a + b, 0);
     currentScore = currentScore * valueArray.length;
     currentScore =
       word.length === duplicateHand.length ? currentScore + 50 : currentScore;
-    console.log(currentScore);
 
+    const letterArray = word.map(letter => letter.letter);
+    let wordString = letterArray.reduce((a, b) => a + b);
+    myWords.push(wordString);
+    console.log(myWords);
     this.setState({
       totalScore: totalScore + currentScore,
       currentScore,
-      word: []
+      word: [],
+      myWords
     });
   };
 
@@ -168,13 +170,13 @@ class App extends Component {
   };
 
   onSubmit = () => {
-    const { word, wordLists, hand } = this.state;
+    const { word, wordLists } = this.state;
     const submittedWord = word.map(letter => letter.letter);
     if (wordLists.includes(submittedWord.join('').toUpperCase())) {
       this.calculateScore();
       this.setState({ isMatch: true });
       this.dismissToast(5000);
-      if (hand.length === 0) this.continueGame();
+      if (hand.length === 0) this.handleEndGame();
     } else {
       this.setState({ isMatch: false });
       this.dismissToast(5000);

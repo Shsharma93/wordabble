@@ -48,8 +48,9 @@
   .container {
     height: 2.5rem;
     width: 14rem;
+    position: absolute;
     font-size: 0.9rem;
-    bottom: 3%;
+    top: 90%;
     right: 2%;
     transition: transform 0.6s ease-in-out;
     animation: toast-in 0.7s;
@@ -57,7 +58,7 @@
   }
 
   .alert {
-    bottom: 55%;
+    top: 40%;
     right: 2%;
   }
 }
