@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import LetterBox from './components/LetterBox/LetterBox';
-import Button from './components/Button/Button';
-import Score from './components/Score/Score';
-import classes from './app.module.scss';
 import { DragDropContext } from 'react-beautiful-dnd';
-import letterValues from './utils/letter-values.json';
-import wordLists from './utils/words.json';
-import Toast from './components/Toast/Toast';
+import jwtDecode from 'jwt-decode';
+import axios from 'axios';
 import {
   FaHistory,
   FaPlayCircle,
@@ -17,13 +12,22 @@ import {
   FaCheckCircle,
   FaExclamationTriangle
 } from 'react-icons/fa';
+import LetterBox from './components/LetterBox/LetterBox';
+import Button from './components/Button/Button';
+import Score from './components/Score/Score';
+import letterValues from './utils/letter-values.json';
+import wordLists from './utils/words.json';
+import Toast from './components/Toast/Toast';
+import Navbar from './components/Navbar/Navbar';
+import apiUrl from './config/config';
+import classes from './app.module.scss';
 
 class App extends Component {
   state = {
     hand: [],
     word: [],
     myWords: [],
-    myGame: [{ hand: '', words: [], score: 0 }],
+    myGame: { hand: '', words: [], score: 0 },
     letterValues: letterValues,
     totalScore: 0,
     currentScore: 0,
@@ -32,17 +36,46 @@ class App extends Component {
     duplicateHand: [],
     prevHand: [],
     isMatch: null,
-    isWarning: false
+    isWarning: false,
+    isLogin: false,
+    user: null
   };
 
-  handleEndGame = () => {
+  componentDidMount() {
+    try {
+      const jwt = localStorage.getItem('token');
+      const user = jwtDecode(jwt);
+      this.setState({ isLogin: true, user: user });
+    } catch (error) {}
+  }
+
+  saveGame = async () => {
+    const { user, myGame } = this.state;
+    const apiEndPoint = apiUrl + '/game';
+    let body = user
+      ? {
+          user: user.id,
+          game: myGame
+        }
+      : {
+          game: myGame
+        };
+
+    try {
+      await axios.post(apiEndPoint, body);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  handleEndGame = async () => {
     const { duplicateHand, myWords, totalScore } = this.state;
 
     const letterArray = duplicateHand.map(letter => letter.letter);
     let handLetter = letterArray.reduce((a, b) => a + b);
     const myGame = { hand: handLetter, words: myWords, score: totalScore };
     console.log(myGame);
-    this.setState({
+    await this.setState({
       hand: [],
       word: [],
       myWords: [],
@@ -51,6 +84,7 @@ class App extends Component {
       prevHand: duplicateHand,
       duplicateHand: []
     });
+    this.saveGame();
   };
 
   handleStartGame = () => {
@@ -152,7 +186,6 @@ class App extends Component {
     const letterArray = word.map(letter => letter.letter);
     let wordString = letterArray.reduce((a, b) => a + b);
     myWords.push(wordString);
-    console.log(myWords);
     this.setState({
       totalScore: totalScore + currentScore,
       currentScore,
@@ -169,14 +202,13 @@ class App extends Component {
     }, time);
   };
 
-  onSubmit = () => {
+  onSubmit = async () => {
     const { word, wordLists } = this.state;
     const submittedWord = word.map(letter => letter.letter);
     if (wordLists.includes(submittedWord.join('').toUpperCase())) {
-      this.calculateScore();
+      await this.calculateScore();
       this.setState({ isMatch: true });
       this.dismissToast(5000);
-      if (hand.length === 0) this.handleEndGame();
     } else {
       this.setState({ isMatch: false });
       this.dismissToast(5000);
@@ -244,7 +276,9 @@ class App extends Component {
       currentScore,
       isStart,
       isMatch,
-      isWarning
+      isWarning,
+      isLogin,
+      user
     } = this.state;
 
     let notification;
@@ -282,6 +316,7 @@ class App extends Component {
 
     return (
       <div className={classes.container}>
+        <Navbar isLogin={isLogin} user={user ? user : null} />
         <div className={classes.header}>
           <div className={classes.start}>
             <Button

@@ -1,7 +1,7 @@
 import React from 'react';
-import classes from './letterBox.module.scss';
-import Letter from '../Letter/Letter';
 import { Droppable } from 'react-beautiful-dnd';
+import Letter from '../Letter/Letter';
+import classes from './letterBox.module.scss';
 
 const LetterBox = ({ letters, id, label }) => {
   return (

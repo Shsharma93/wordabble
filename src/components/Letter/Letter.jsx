@@ -1,6 +1,7 @@
 import React from 'react';
-import classes from './letter.module.scss';
 import { Draggable } from 'react-beautiful-dnd';
+import classes from './letter.module.scss';
+
 
 const Letter = ({ text, index }) => {
   return (

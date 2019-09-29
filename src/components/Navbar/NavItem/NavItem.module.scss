@@ -1,0 +1,12 @@
+.wrapper {
+  display: flex;
+  .icon {
+    margin: 0 1rem;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .label {
+    display: none;
+  }
+}

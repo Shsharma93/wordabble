@@ -1,0 +1,25 @@
+.form {
+  height: 35rem;
+  box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
+  background: #ffd166;
+  width: 30rem;
+  margin: 1rem;
+
+  h1 {
+    margin: 2rem auto;
+    text-align: center;
+  }
+  .label {
+    text-align: center;
+  }
+
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+  .warning {
+    height: 1rem;
+    color: red;
+    margin-left: 5%;
+  }
+}
