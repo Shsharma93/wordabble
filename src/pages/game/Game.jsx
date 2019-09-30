@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import {
   FaHistory,
@@ -15,22 +15,28 @@ import Toast from '../../components/Toast/Toast';
 import Score from '../../components/Score/Score';
 import LetterBox from '../../components/LetterBox/LetterBox';
 import classes from './game.module.scss';
+import { Context } from '../../Context';
 
-const Game = ({
-  isMatch,
-  isWarning,
-  hand,
-  isStart,
-  word,
-  totalScore,
-  currentScore,
-  handleStartGame,
-  handleEndGame,
-  handleReplayGame,
-  handleReset,
-  onDragEnd,
-  onSubmit
-}) => {
+const Game = () => {
+  const { state } = useContext(Context);
+  const {
+    isMatch,
+    isWarning,
+    hand,
+    isStart,
+    word,
+    totalScore,
+    currentScore,
+    handleStartGame,
+    handleEndGame,
+    handleReplayGame,
+    handleReset,
+    onDragEnd,
+    onSubmit,
+    dismissToast,
+    dismissWarning
+  } = state;
+
   let notification;
 
   if (isMatch === true) {
@@ -39,7 +45,7 @@ const Game = ({
         type='success'
         icon={<FaCheckCircle className={classes.success} />}
         text='Awesome! Correct Guess'
-        onClick={() => this.dismissToast(100)}
+        onClick={() => dismissToast(100)}
       />
     );
   } else if (isMatch === false) {
@@ -48,7 +54,7 @@ const Game = ({
         type='error'
         icon={<FaTimes className={classes.error} />}
         text='Wrong Guess, Try Again!'
-        onClick={() => this.dismissToast(100)}
+        onClick={() => dismissToast(100)}
       />
     );
   }
@@ -58,7 +64,7 @@ const Game = ({
       type='warning'
       icon={<FaExclamationTriangle className={classes.warning} />}
       text={`Only ${hand.length} Letter(s) Left`}
-      onClick={() => this.dismissWarning(100)}
+      onClick={() => dismissWarning(100)}
     />
   ) : (
     ''
