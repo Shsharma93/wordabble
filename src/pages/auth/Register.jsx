@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import Form from '../../components/Form/Form';
-import NavBar from '../../components/Navbar/Navbar';
 import apiUrl from '../../config/config';
 import validateInput from '../../validation/register';
 import classes from './auth.module.scss';
@@ -61,7 +60,6 @@ class Register extends Component {
     const { user, error } = this.state;
     return (
       <Fragment>
-        <NavBar isLogin={false} />
         <div className={classes.container}>
           <Form
             title='Register'

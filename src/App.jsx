@@ -1,26 +1,19 @@
-import React, { Component } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
+import React, { Component, Fragment } from 'react';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
-import {
-  FaHistory,
-  FaPlayCircle,
-  FaStopCircle,
-  FaPaperPlane,
-  FaTrashAlt,
-  FaTimes,
-  FaCheckCircle,
-  FaExclamationTriangle
-} from 'react-icons/fa';
-import LetterBox from './components/LetterBox/LetterBox';
-import Button from './components/Button/Button';
-import Score from './components/Score/Score';
 import letterValues from './utils/letter-values.json';
 import wordLists from './utils/words.json';
-import Toast from './components/Toast/Toast';
-import Navbar from './components/Navbar/Navbar';
 import apiUrl from './config/config';
-import classes from './app.module.scss';
+import Game from './pages/game/Game';
+import getHandValue from './samples';
+import Navbar from './components/Navbar/Navbar';
+
+import Admin from './pages/admin/Admin';
+import { Route, Switch } from 'react-router-dom';
+import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
+import Logout from './pages/auth/Logout';
+import GameHistory from './pages/gamehistory/GameHistory';
 
 class App extends Component {
   state = {
@@ -91,7 +84,7 @@ class App extends Component {
     const { letterValues, duplicateHand, prevHand } = this.state;
     if (!letterValues) return;
 
-    const hand = this.getHandValue();
+    const hand = getHandValue();
     let duplicate = prevHand.length === 0 ? hand : duplicateHand;
 
     this.setState({
@@ -104,53 +97,6 @@ class App extends Component {
       duplicateHand: hand,
       prevHand: duplicate
     });
-  };
-
-  // getHandValue = () => {
-  //   return Array.from({ length: 7 }, (v, k) => k).map(k => {
-  //     const random = Math.floor(Math.random() * 26) + 0;
-  //     const letter = Object.keys(letterValues)[random];
-  //     const value = letterValues[letter];
-  //     return {
-  //       id: `letter-${k}`,
-  //       letter,
-  //       value
-  //     };
-  //   });
-  // };
-
-  getHandValue = () => {
-    const random = Math.floor(Math.random() * 3) + 0;
-    const handList = [
-      [
-        { id: 'item-1', letter: 'i', value: 1 },
-        { id: 'item-2', letter: 'n', value: 2 },
-        { id: 'item-3', letter: 'e', value: 3 },
-        { id: 'item-4', letter: 'r', value: 4 },
-        { id: 'item-5', letter: 't', value: 5 },
-        { id: 'item-6', letter: 'i', value: 6 },
-        { id: 'item-7', letter: 'a', value: 7 }
-      ],
-      [
-        { id: 'item-1', letter: 'a', value: 1 },
-        { id: 'item-2', letter: 'n', value: 2 },
-        { id: 'item-3', letter: 'i', value: 3 },
-        { id: 'item-4', letter: 'm', value: 4 },
-        { id: 'item-5', letter: 'a', value: 5 },
-        { id: 'item-6', letter: 't', value: 6 },
-        { id: 'item-7', letter: 'e', value: 7 }
-      ],
-      [
-        { id: 'item-1', letter: 'a', value: 1 },
-        { id: 'item-2', letter: 's', value: 2 },
-        { id: 'item-3', letter: 'o', value: 3 },
-        { id: 'item-4', letter: 'c', value: 4 },
-        { id: 'item-5', letter: 'i', value: 5 },
-        { id: 'item-6', letter: 'a', value: 6 },
-        { id: 'item-7', letter: 'l', value: 7 }
-      ]
-    ];
-    return handList[random];
   };
 
   handleReplayGame = () => {
@@ -270,104 +216,49 @@ class App extends Component {
 
   render() {
     const {
-      hand,
-      totalScore,
-      word,
-      currentScore,
-      isStart,
       isMatch,
       isWarning,
+      hand,
       isLogin,
-      user
+      isStart,
+      word,
+      user,
+      totalScore,
+      currentScore
     } = this.state;
-
-    let notification;
-
-    if (isMatch === true) {
-      notification = (
-        <Toast
-          type='success'
-          icon={<FaCheckCircle className={classes.success} />}
-          text='Awesome! Correct Guess'
-          onClick={() => this.dismissToast(100)}
-        />
-      );
-    } else if (isMatch === false) {
-      notification = (
-        <Toast
-          type='error'
-          icon={<FaTimes className={classes.error} />}
-          text='Wrong Guess, Try Again!'
-          onClick={() => this.dismissToast(100)}
-        />
-      );
-    }
-
-    let warning = isWarning ? (
-      <Toast
-        type='warning'
-        icon={<FaExclamationTriangle className={classes.warning} />}
-        text={`Only ${hand.length} Letter(s) Left`}
-        onClick={() => this.dismissWarning(100)}
-      />
-    ) : (
-      ''
-    );
-
     return (
-      <div className={classes.container}>
+      <Fragment>
         <Navbar isLogin={isLogin} user={user ? user : null} />
-        <div className={classes.header}>
-          <div className={classes.start}>
-            <Button
-              text='start'
-              onClick={this.handleStartGame}
-              icon={<FaPlayCircle className={classes.icon} />}
-            />
-            <Button
-              text='end'
-              onClick={this.handleEndGame}
-              active={isStart ? false : true}
-              icon={<FaStopCircle className={classes.icon} />}
-            />
-          </div>
-          <div className={classes.scores}>
-            <Score score={totalScore} text='total score' />
-            <Score score={currentScore} text='current score' />
-          </div>
-          <div className={classes.replay}>
-            <Button
-              text='replay'
-              onClick={this.handleReplayGame}
-              icon={<FaHistory className={classes.icon} />}
-            />
-            <Button
-              text='reset'
-              onClick={this.handleReset}
-              active={isStart ? false : true}
-              icon={<FaTrashAlt className={classes.icon} />}
-            />
-          </div>
-        </div>
-        <div className={classes.body}>
-          <DragDropContext onDragEnd={this.onDragEnd}>
-            <LetterBox letters={hand} id='hand' label='Letter hands' />
-            <LetterBox
-              letters={word}
-              id='word'
-              label='Drag n drop letters in thix box to make words.'
-            />
-          </DragDropContext>
-          <Button
-            text='submit'
-            onClick={this.onSubmit}
-            active={word.length > 0 ? false : true}
-            icon={<FaPaperPlane className={classes.icon} />}
+        <Switch>
+          <Route path='/admin' component={Admin} />
+          <Route path='/register' component={Register} />
+          <Route path='/login' component={Login} />
+          <Route path='/logout' component={Logout} />
+          <Route path='/gamehistory' component={GameHistory} />
+          <Route
+            path='/'
+            render={() => (
+              <Game
+                isLogin={isLogin}
+                isMatch={isMatch}
+                isWarning={isWarning}
+                hand={hand}
+                isStart={isStart}
+                word={word}
+                user={user}
+                totalScore={totalScore}
+                currentScore={currentScore}
+                handleStartGame={this.handleStartGame}
+                handleEndGame={this.handleEndGame}
+                handleReplayGame={this.handleReplayGame}
+                handleReset={this.handleReset}
+                onDragEnd={this.onDragEnd}
+                onSubmit={this.onSubmit}
+              />
+            )}
           />
-          {notification}
-          {warning}
-        </div>
-      </div>
+        </Switch>
+      </Fragment>
     );
   }
 }
