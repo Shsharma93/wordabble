@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   FaUserAlt,
   FaSignInAlt,
@@ -9,8 +9,11 @@ import {
 import { Link } from 'react-router-dom';
 import NavItem from './NavItem/NavItem';
 import classes from './navbar.module.scss';
+import { AuthContext } from '../../Context/AuthContext';
 
-const Navbar = ({ isLogin, user }) => {
+const Navbar = () => {
+  const { state } = useContext(AuthContext);
+  const { isLogin, user } = state;
   let navList = (
     <div className={classes.navigation}>
       <Link to='/register'>
@@ -32,7 +35,7 @@ const Navbar = ({ isLogin, user }) => {
     navList = (
       <div className={classes.navigation}>
         <NavItem
-          text={user.username}
+          text={user ? user.username : ''}
           icon={<FaUserAlt className={classes.icon} />}
         />
         <Link to='/gamehistory'>

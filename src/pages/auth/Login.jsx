@@ -1,47 +1,40 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import axios from 'axios';
 import Form from '../../components/Form/Form';
 import apiUrl from '../../config/config';
 import validateInput from '../../validation/register';
 import classes from './auth.module.scss';
+import { AuthContext } from '../../Context/AuthContext';
 
 const apiEndPoint = apiUrl + '/login';
 
-class Login extends Component {
-  state = {
-    user: {
-      username: '',
-      password: ''
-    },
-    error: ''
+const Login = props => {
+  const [user, setUser] = useState({ username: '', password: '' });
+  const [error, setError] = useState(null);
+
+  const { state } = useContext(AuthContext);
+  const { checkAuth } = state;
+
+  const handleInputChange = event => {
+    const userInput = { ...user };
+    userInput[event.target.name] = event.target.value;
+    setUser(userInput);
   };
 
-  handleInputChange = event => {
-    const user = { ...this.state.user };
-    user[event.target.name] = event.target.value;
-    this.setState({ user });
-  };
-
-  dismissError = () => {
-    setTimeout(() => {
-      this.setState({
-        error: null
-      });
+  const dismissError = async () => {
+    await setTimeout(() => {
+      setError(null);
     }, 2000);
   };
 
-  handleOnSubmit = async event => {
+  const handleOnSubmit = async event => {
     event.preventDefault();
-
-    const {
-      user: { username, password }
-    } = this.state;
-
-    const { error } = validateInput(this.state.user);
+    const { username, password } = user;
+    const { error } = validateInput(user);
 
     if (error) {
-      this.dismissError();
-      return this.setState({ error: error.details[0].message });
+      dismissError();
+      return setError(error.details[0].message);
     }
 
     try {
@@ -50,31 +43,29 @@ class Login extends Component {
         password
       });
       localStorage.setItem('token', result.headers['x-auth-token']);
-      this.props.history.push('/');
+      checkAuth();
+      props.history.push('/');
     } catch (error) {
-      console.log(error.response);
-      this.setState({ error: error.response.data.message });
+      setError(error.response.data.message);
+      dismissError();
     }
   };
 
-  render() {
-    const { user, error } = this.state;
-    return (
-      <Fragment>
-        <div className={classes.container}>
-          <Form
-            title='Login'
-            btn='Sign In'
-            type='login'
-            submit={this.handleOnSubmit}
-            onChange={this.handleInputChange}
-            user={user}
-            error={error}
-          />
-        </div>
-      </Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      <div className={classes.container}>
+        <Form
+          title='Login'
+          btn='Sign In'
+          type='login'
+          submit={handleOnSubmit}
+          onChange={handleInputChange}
+          user={user}
+          error={error}
+        />
+      </div>
+    </Fragment>
+  );
+};
 
 export default Login;

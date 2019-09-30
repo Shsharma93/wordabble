@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import jwtDecode from 'jwt-decode';
 import axios from 'axios';
-import apiUrl from './config/config';
-import getHandValue from './samples';
-import letterValues from './utils/letter-values.json';
-import wordLists from './utils/words.json';
+import apiUrl from '../config/config';
+import getHandValue from '../samples';
+import letterValues from '../config/config';
+import wordLists from '../utils/words.json';
 
-export const Context = React.createContext();
+export const GameContext = React.createContext();
 
 export class Provider extends Component {
   state = {
@@ -76,7 +75,6 @@ export class Provider extends Component {
       const letterArray = duplicateHand.map(letter => letter.letter);
       let handLetter = letterArray.reduce((a, b) => a + b);
       const myGame = { hand: handLetter, words: myWords, score: totalScore };
-      console.log(myGame);
       await this.setState({
         hand: [],
         word: [],
@@ -186,19 +184,11 @@ export class Provider extends Component {
     }
   };
 
-  componentDidMount() {
-    try {
-      const jwt = localStorage.getItem('token');
-      const user = jwtDecode(jwt);
-      this.setState({ isLogin: true, user: user });
-    } catch (error) {}
-  }
-
   render() {
     return (
-      <Context.Provider value={{ state: this.state }}>
+      <GameContext.Provider value={{ state: this.state }}>
         {this.props.children}
-      </Context.Provider>
+      </GameContext.Provider>
     );
   }
 }
