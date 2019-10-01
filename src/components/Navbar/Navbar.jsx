@@ -81,12 +81,6 @@ const Navbar = props => {
             icon={<FaGamepad className={classes.icon} />}
           />
         </Link>
-        <Link to='/admin/modify-values'>
-          <NavItem
-            text='Modify Values'
-            icon={<FaSignOutAlt className={classes.icon} />}
-          />
-        </Link>
       </div>
     );
   }

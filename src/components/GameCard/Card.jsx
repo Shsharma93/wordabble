@@ -2,7 +2,6 @@ import React from 'react';
 import classes from './card.module.scss';
 
 const Card = ({ game, date, username }) => {
-  console.log(username);
   return (
     <div className={classes.wrapper}>
       <div className={classes.user}>{!username ? 'Guest User' : username}</div>

@@ -7,6 +7,7 @@ const GameHistory = () => {
   const { state } = useContext(Context);
   const { game } = state;
 
+  console.log(game);
   return (
     <div className={classes.container}>
       <div className={classes.header}>

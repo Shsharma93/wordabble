@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import apiUrl from './config/config';
-import getHandValue from './samples';
-import letterValues from './config/config';
+import letterValues from './utils/letter-values.json';
 import wordLists from './utils/words.json';
 
 export const Context = React.createContext();
@@ -26,6 +25,18 @@ export class Provider extends Component {
     isLogin: false,
     user: null,
     game: null,
+    getHandValue: () => {
+      return Array.from({ length: 7 }, (v, k) => k).map(k => {
+        const random = Math.floor(Math.random() * 26) + 0;
+        const letter = Object.keys(letterValues)[random];
+        const value = letterValues[letter];
+        return {
+          id: `letter-${k}`,
+          letter,
+          value
+        };
+      });
+    },
     getMyGame: async () => {
       const apiEndPoint = apiUrl + '/game';
       try {
@@ -42,6 +53,16 @@ export class Provider extends Component {
       const apiEndPoint = apiUrl + '/game';
       try {
         const response = await axios.get(apiEndPoint);
+        this.setState({ game: response.data.games });
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+    getUserGame: async id => {
+      const apiEndPoint = apiUrl + '/game/' + id;
+      try {
+        const response = await axios.get(apiEndPoint);
+        console.log(response);
         this.setState({ game: response.data.games });
       } catch (error) {
         console.log(error.message);
@@ -77,7 +98,12 @@ export class Provider extends Component {
       }
     },
     handleStartGame: () => {
-      const { letterValues, duplicateHand, prevHand } = this.state;
+      const {
+        letterValues,
+        duplicateHand,
+        prevHand,
+        getHandValue
+      } = this.state;
       if (!letterValues) return;
 
       const hand = getHandValue();

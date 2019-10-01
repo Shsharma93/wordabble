@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import classes from './admin.module.scss';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
+import { Context } from '../../Context';
+import GameHistory from '../gamehistory/GameHistory';
 
 const Admin = () => {
   const [searchText, setSearch] = useState('');
+  const { state } = useContext(Context);
+  const { getUserGame } = state;
 
   const handleInput = event => {
     setSearch(event.target.value);
@@ -20,8 +24,13 @@ const Admin = () => {
           value={searchText}
           name='search'
         />
-        <Button text='search' onClick='sbc' />
+        <Button
+          text='search'
+          onClick={() => getUserGame(searchText)}
+          active={searchText.length > 0 ? false : true}
+        />
       </div>
+      <GameHistory />
     </div>
   );
 };

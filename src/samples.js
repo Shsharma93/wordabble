@@ -32,17 +32,17 @@ const getHandValue = () => {
   return handList[random];
 };
 
-// const getHandValue = () => {
-//   return Array.from({ length: 7 }, (v, k) => k).map(k => {
-//     const random = Math.floor(Math.random() * 26) + 0;
-//     const letter = Object.keys(letterValues)[random];
-//     const value = letterValues[letter];
-//     return {
-//       id: `letter-${k}`,
-//       letter,
-//       value
-//     };
-//   });
-// };
+const getHandValue = () => {
+  return Array.from({ length: 7 }, (v, k) => k).map(k => {
+    const random = Math.floor(Math.random() * 26) + 0;
+    const letter = Object.keys(letterValues)[random];
+    const value = letterValues[letter];
+    return {
+      id: `letter-${k}`,
+      letter,
+      value
+    };
+  });
+};
 
-export default getHandValue;
+// export default getHandValue;
