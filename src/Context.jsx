@@ -165,7 +165,8 @@ export class Provider extends Component {
       this.setState({
         hand: duplicateHand,
         word: [],
-        currentScore: 0
+        currentScore: 0,
+        totalScore: 0
       });
     },
     calculateScore: () => {
