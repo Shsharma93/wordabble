@@ -1,23 +1,26 @@
 .wrapper {
   width: 100%;
   height: 5rem;
-  border: 1px solid red;
   background: #ffd166;
   margin: 1rem auto;
   box-shadow: 3px 3px 20px rgba(236, 225, 225, 0.5);
   display: flex;
   font-size: 1.2rem;
   align-items: center;
+  .user {
+    width: 25%;
+    text-align: center;
+  }
   .date {
-    width: 30%;
+    width: 25%;
     text-align: center;
   }
   .hand {
-    width: 20%;
+    width: 15%;
     text-align: center;
   }
   .score {
-    width: 20%;
+    width: 15%;
     text-align: center;
   }
   .words {

@@ -25,6 +25,28 @@ export class Provider extends Component {
     isWarning: false,
     isLogin: false,
     user: null,
+    game: null,
+    getMyGame: async () => {
+      const apiEndPoint = apiUrl + '/game';
+      try {
+        const response = await axios.get(
+          `${apiEndPoint}/?id=${this.state.user.username}`
+        );
+        console.log(response);
+        this.setState({ game: response.data.games });
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+    getAllGame: async () => {
+      const apiEndPoint = apiUrl + '/game';
+      try {
+        const response = await axios.get(apiEndPoint);
+        this.setState({ game: response.data.games });
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
     checkAuth: () => {
       try {
         const jwt = localStorage.getItem('token');
@@ -37,10 +59,11 @@ export class Provider extends Component {
     },
     saveGame: async () => {
       const { user, myGame } = this.state;
+      console.log(user);
       const apiEndPoint = apiUrl + '/game';
       let body = user
         ? {
-            user: user.id,
+            user: user.username,
             game: myGame
           }
         : {

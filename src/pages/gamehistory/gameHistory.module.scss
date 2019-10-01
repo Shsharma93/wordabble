@@ -2,16 +2,18 @@
   min-height: 92vh;
   background: #118ab2;
   .wrapper {
-    width: 80%;
+    width: 90%;
     margin: 0rem auto;
     margin-top: 2rem;
     padding-bottom: 2rem;
   }
   .header {
     display: flex;
-    width: 80%;
+    width: 90%;
     padding-top: 4rem;
     margin: 0rem auto;
+    font-size: 1.5rem;
+    color: #f9ebe0;
     justify-content: space-evenly;
   }
 }

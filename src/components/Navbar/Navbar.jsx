@@ -6,27 +6,31 @@ import {
   FaUserPlus,
   FaGamepad
 } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import NavItem from './NavItem/NavItem';
 import classes from './navbar.module.scss';
 import { Context } from '../../Context';
 
-const Navbar = () => {
+const Navbar = props => {
   const { state } = useContext(Context);
-  const { isLogin, user } = state;
+  const { isLogin, user, logout, getMyGame, getAllGame } = state;
 
   let navList = (
     <div className={classes.navigation}>
-      <Link to='/register'>
-        <NavItem
-          text='Sign up'
-          icon={<FaUserPlus className={classes.icon} />}
-        />
+      <Link to='/admin'>
+        <NavItem text='admin' icon={<FaUserAlt className={classes.icon} />} />
       </Link>
+
       <Link to='/login'>
         <NavItem
           text='Sign In'
           icon={<FaSignInAlt className={classes.icon} />}
+        />
+      </Link>
+      <Link to='/register'>
+        <NavItem
+          text='Sign up'
+          icon={<FaUserPlus className={classes.icon} />}
         />
       </Link>
     </div>
@@ -35,12 +39,15 @@ const Navbar = () => {
   if (isLogin) {
     navList = (
       <div className={classes.navigation}>
-        <NavItem
-          text={user ? user.username : ''}
-          icon={<FaUserAlt className={classes.icon} />}
-        />
+        <Link to='/'>
+          <NavItem
+            text={user ? user.username : ''}
+            icon={<FaUserAlt className={classes.icon} />}
+          />
+        </Link>
         <Link to='/gamehistory'>
           <NavItem
+            onClick={getMyGame}
             text='Game History'
             icon={<FaGamepad className={classes.icon} />}
           />
@@ -48,6 +55,35 @@ const Navbar = () => {
         <Link to='/logout'>
           <NavItem
             text='Sign Out'
+            icon={<FaSignOutAlt className={classes.icon} />}
+          />
+        </Link>
+      </div>
+    );
+  }
+
+  const routes = props.location.pathname.split('/');
+
+  if (routes.includes('admin')) {
+    if (user) logout();
+    navList = (
+      <div className={classes.navigation}>
+        <Link to='/admin'>
+          <NavItem
+            text={'admin'}
+            icon={<FaUserAlt className={classes.icon} />}
+          />
+        </Link>
+        <Link to='/admin/gamehistory'>
+          <NavItem
+            onClick={getAllGame}
+            text='Game History'
+            icon={<FaGamepad className={classes.icon} />}
+          />
+        </Link>
+        <Link to='/admin/modify-values'>
+          <NavItem
+            text='Modify Values'
             icon={<FaSignOutAlt className={classes.icon} />}
           />
         </Link>
@@ -65,4 +101,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default withRouter(Navbar);
