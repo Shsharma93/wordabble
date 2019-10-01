@@ -4,7 +4,7 @@ import Form from '../../components/Form/Form';
 import apiUrl from '../../config/config';
 import validateInput from '../../validation/register';
 import classes from './auth.module.scss';
-import { AuthContext } from '../../Context/AuthContext';
+import { Context } from '../../Context';
 
 const apiEndPoint = apiUrl + '/login';
 
@@ -12,7 +12,7 @@ const Login = props => {
   const [user, setUser] = useState({ username: '', password: '' });
   const [error, setError] = useState(null);
 
-  const { state } = useContext(AuthContext);
+  const { state } = useContext(Context);
   const { checkAuth } = state;
 
   const handleInputChange = event => {

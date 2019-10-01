@@ -9,11 +9,12 @@ import {
 import { Link } from 'react-router-dom';
 import NavItem from './NavItem/NavItem';
 import classes from './navbar.module.scss';
-import { AuthContext } from '../../Context/AuthContext';
+import { Context } from '../../Context';
 
 const Navbar = () => {
-  const { state } = useContext(AuthContext);
+  const { state } = useContext(Context);
   const { isLogin, user } = state;
+
   let navList = (
     <div className={classes.navigation}>
       <Link to='/register'>

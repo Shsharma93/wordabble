@@ -1,8 +1,8 @@
 import { useContext, useEffect } from 'react';
-import { AuthContext } from '../../Context/AuthContext';
+import { Context } from '../../Context';
 
 const Logout = props => {
-  const { state } = useContext(AuthContext);
+  const { state } = useContext(Context);
   const { logout } = state;
 
   useEffect(() => {

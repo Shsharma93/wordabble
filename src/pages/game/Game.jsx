@@ -15,10 +15,10 @@ import Toast from '../../components/Toast/Toast';
 import Score from '../../components/Score/Score';
 import LetterBox from '../../components/LetterBox/LetterBox';
 import classes from './game.module.scss';
-import { GameContext } from '../../Context/GameContext';
+import { Context } from '../../Context';
 
 const Game = () => {
-  const { state } = useContext(GameContext);
+  const { state } = useContext(Context);
   const {
     isMatch,
     isWarning,

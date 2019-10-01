@@ -7,6 +7,21 @@
   box-shadow: 3px 3px 20px rgba(236, 225, 225, 0.5);
   display: flex;
   font-size: 1.2rem;
-  justify-content: space-around;
   align-items: center;
+  .date {
+    width: 30%;
+    text-align: center;
+  }
+  .hand {
+    width: 20%;
+    text-align: center;
+  }
+  .score {
+    width: 20%;
+    text-align: center;
+  }
+  .words {
+    width: 30%;
+    text-align: center;
+  }
 }

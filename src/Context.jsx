@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import apiUrl from '../config/config';
-import getHandValue from '../samples';
-import letterValues from '../config/config';
-import wordLists from '../utils/words.json';
+import jwtDecode from 'jwt-decode';
+import apiUrl from './config/config';
+import getHandValue from './samples';
+import letterValues from './config/config';
+import wordLists from './utils/words.json';
 
-export const GameContext = React.createContext();
+export const Context = React.createContext();
 
 export class Provider extends Component {
   state = {
@@ -22,6 +23,18 @@ export class Provider extends Component {
     prevHand: [],
     isMatch: null,
     isWarning: false,
+    isLogin: false,
+    user: null,
+    checkAuth: () => {
+      try {
+        const jwt = localStorage.getItem('token');
+        const user = jwtDecode(jwt);
+        this.setState({ isLogin: true, user });
+      } catch (error) {}
+    },
+    logout: () => {
+      this.setState({ isLogin: false, user: null });
+    },
     saveGame: async () => {
       const { user, myGame } = this.state;
       const apiEndPoint = apiUrl + '/game';
@@ -184,11 +197,15 @@ export class Provider extends Component {
     }
   };
 
+  componentDidMount() {
+    this.state.checkAuth();
+  }
+
   render() {
     return (
-      <GameContext.Provider value={{ state: this.state }}>
+      <Context.Provider value={{ state: this.state }}>
         {this.props.children}
-      </GameContext.Provider>
+      </Context.Provider>
     );
   }
 }
